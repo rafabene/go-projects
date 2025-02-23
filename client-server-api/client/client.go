@@ -11,7 +11,7 @@ import (
 
 func main() {
 	cotacao := obterCotacao()
-	println("Cotação do Dólar: ", cotacao.Bid)
+	println("Dólar: ", cotacao.Bid)
 
 }
 
