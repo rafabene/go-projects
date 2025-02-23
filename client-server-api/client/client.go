@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/rafabene/client-server-api/common"
@@ -11,8 +12,13 @@ import (
 
 func main() {
 	cotacao := obterCotacao()
-	println("Dólar: ", cotacao.Bid)
+	armazenarCotacao(cotacao)
+	println("Cotação armazenada com sucesso no arquivo cotacao.txt!")
 
+}
+
+func armazenarCotacao(cotacao common.Cotacao) {
+	os.WriteFile("cotacao.txt", []byte("Dólar: "+cotacao.Bid), 0644)
 }
 
 func obterCotacao() common.Cotacao {
