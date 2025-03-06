@@ -29,7 +29,7 @@ go run client.go
 
 1️⃣ **Cliente (`client.go`)** solicita a cotação do dólar ao servidor.
 
-2️⃣ **Servidor (`server.go`)** busca a cotação da API externa e futuramente armazenará no banco SQLite.
+2️⃣ **Servidor (`server.go`)** busca a cotação da API externa e armazena os resultados no banco SQLite.
 
 3️⃣ **Servidor responde ao cliente** com o valor do **bid**.
 

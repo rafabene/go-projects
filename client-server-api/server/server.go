@@ -8,13 +8,23 @@ import (
 	"time"
 
 	"github.com/rafabene/client-server-api/common"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 const url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
 const port = ":8080"
 const path = "/cotacao"
 
+var db *gorm.DB
+
 func main() {
+
+	db, _ = gorm.Open(sqlite.Open("cotacao.db"), &gorm.Config{})
+
+	// Migrate the schema
+	db.AutoMigrate(&common.Cotacao{})
+
 	// Iniciar o servidor
 	startServer()
 }
@@ -56,21 +66,23 @@ func obterCotacao(w http.ResponseWriter, r *http.Request) {
 	//Fazer o unmarshal do json para a estrutura Cotacao
 	cotacao := common.FromJsonToCotacao(b)
 
-	//Registrar cotação no banco de dados
-	registrarCotacao(cotacao)
-
 	//Mostrar cotação na resposta
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(b)
 
+	//Registrar cotação no banco de dados
+	registrarCotacao(cotacao)
 }
 
 // Função que simula o registro da cotação no banco de dados
-// TODO Será implementado posteriormente quando o banco de dados estiver disponível
-func registrarCotacao(_ common.Cotacao) {
+func registrarCotacao(cotacao common.Cotacao) {
 	log.Printf("Registrando Cotação no banco de dados.")
 
 	// Contexto com timeout
-	_, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
+
+	result := db.WithContext(ctx).Debug().Create(&cotacao)
+
+	println(result.Error)
 }
