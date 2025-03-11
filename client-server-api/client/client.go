@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/rafabene/client-server-api/common"
+	"github.com/rafabene/go-projects/client-server-api/common"
 )
 
 func main() {

@@ -1,7 +1,3 @@
-module github.com/rafabene/client-server-api/client
-
-require github.com/rafabene/client-server-api/common v0.0.0
-
-replace github.com/rafabene/client-server-api/common => ../common
+module github.com/rafabene/go-projects/client-server-api/client
 
 go 1.23.6

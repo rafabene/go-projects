@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rafabene/client-server-api/common"
+	"github.com/rafabene/go-projects/client-server-api/common"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
