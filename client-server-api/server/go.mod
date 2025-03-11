@@ -1,5 +1,7 @@
 module github.com/rafabene/client-server-api/server
 
+require github.com/rafabene/go-projects/client-server-api/common v1.0.0
+
 require (
 	gorm.io/driver/sqlite v1.5.7
 	gorm.io/gorm v1.25.12
@@ -12,6 +14,6 @@ require (
 	golang.org/x/text v0.23.0 // indirect
 )
 
-replace github.com/rafabene/client-server-api/common => ../common
+replace github.com/rafabene/go-projects/client-server-api/common => ../common
 
 go 1.23.6
