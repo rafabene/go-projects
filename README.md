@@ -11,7 +11,7 @@ Este repositório reúne diversos projetos desenvolvidos em Go, abrangendo desde
 A estrutura do repositório é organizada por pastas, onde cada diretório representa um projeto ou exemplo específico. Por exemplo:
 
 - **/client-server-api**: Demonstra a execução de uma API REST
-- _..._
+- **/multithreading**: Demonstra o uso de Channels para pegar a resposta mais rápida de uma API
 
 Verifique o README individual de cada projeto para obter mais informações sobre como executá-los e testá-los.
 
