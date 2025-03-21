@@ -1,0 +1,4 @@
+url1: https://brasilapi.com.br/api/cep/v1/%s
+url2: http://viacep.com.br/ws/%s/json/
+timeoutMillis: 1000
+cep: 75110430
