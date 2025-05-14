@@ -12,6 +12,7 @@ A estrutura do repositório é organizada por pastas, onde cada diretório repre
 
 - **/client-server-api**: Demonstra a execução de uma API REST
 - **/multithreading**: Demonstra o uso de Channels para pegar a resposta mais rápida de uma API
+- **/cleanarch**: Demonstra uma arquitetura lima (Clean Architecture) expondo serviços em REST, gRPC e GraphQL.
 
 Verifique o README individual de cada projeto para obter mais informações sobre como executá-los e testá-los.
 
