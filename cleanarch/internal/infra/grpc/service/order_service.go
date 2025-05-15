@@ -5,6 +5,7 @@ import (
 
 	"github.com/devfullcycle/20-CleanArch/internal/infra/grpc/pb"
 	"github.com/devfullcycle/20-CleanArch/internal/usecase"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type OrderService struct {
@@ -13,19 +14,14 @@ type OrderService struct {
 	ListOrderUseCase   usecase.ListOrderUseCase
 }
 
-func NewOrderService(createOrderUseCase usecase.CreateOrderUseCase) *OrderService {
+func NewOrderService(createOrderUseCase usecase.CreateOrderUseCase, listOrderUserCase usecase.ListOrderUseCase) *OrderService {
 	return &OrderService{
 		CreateOrderUseCase: createOrderUseCase,
+		ListOrderUseCase:   listOrderUserCase,
 	}
 }
 
-func ListOrderUseCase(listOrderUserCase usecase.ListOrderUseCase) *OrderService {
-	return &OrderService{
-		ListOrderUseCase: listOrderUserCase,
-	}
-}
-
-func (s *OrderService) ListOrder(ctx context.Context) (*pb.ListOrdersResponse, error) {
+func (s *OrderService) ListOrders(ctx context.Context, empty *emptypb.Empty) (*pb.ListOrdersResponse, error) {
 	orders, err := s.ListOrderUseCase.Execute()
 	if err != nil {
 		return nil, err
