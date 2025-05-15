@@ -21,6 +21,11 @@ import (
 
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
+
+	//migrate
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
@@ -35,10 +40,21 @@ func main() {
 	}
 	defer db.Close()
 
+	// Run migrations
+	mysqlDriver, _ := mysql.WithInstance(db, &mysql.Config{})
+	m, err := migrate.NewWithDatabaseInstance("file://../../db/migrations", "mysql", mysqlDriver)
+	if err != nil {
+		panic(err)
+	}
+	m.Up()
+
 	rabbitMQChannel := getRabbitMQChannel()
 
 	eventDispatcher := events.NewEventDispatcher()
 	eventDispatcher.Register("OrderCreated", &handler.OrderCreatedHandler{
+		RabbitMQChannel: rabbitMQChannel,
+	})
+	eventDispatcher.Register("OrderListed", &handler.OrderListedHandler{
 		RabbitMQChannel: rabbitMQChannel,
 	})
 
@@ -47,6 +63,7 @@ func main() {
 	webserver := webserver.NewWebServer(configs.WebServerPort)
 	webOrderHandler := NewWebOrderHandler(db, eventDispatcher)
 	webserver.AddHandler("/order", webOrderHandler.Create)
+	webserver.AddHandler("/order", webOrderHandler.List)
 	fmt.Println("Starting web server on port", configs.WebServerPort)
 	go webserver.Start()
 
