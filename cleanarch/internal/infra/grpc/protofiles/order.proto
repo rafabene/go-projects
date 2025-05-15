@@ -15,6 +15,15 @@ message CreateOrderResponse {
   float final_price = 4;
 }
 
+message ListOrdersResponse {
+  repeated CreateOrderResponse orders = 1;
+}
+
+// Importing the google/protobuf/empty.proto file to use the Empty message 
+// for the ListOrders RPC method
+import "google/protobuf/empty.proto";
+
 service OrderService {
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+  rpc ListOrders(google.protobuf.Empty) returns (ListOrdersResponse);
 }
