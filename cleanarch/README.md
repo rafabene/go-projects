@@ -51,6 +51,7 @@ Elas serão executadas automaticamente
 ### Rodando a aplicação
 
 ```sh
+cd cmd/ordersystem
 go build
 ./ordersystem
 ```
@@ -64,6 +65,8 @@ A aplicação estará disponível em:
 ## Exemplos de uso
 
 ### GraphQL
+
+Acesse <http://localhost:8080/graphql> no browser
 
 #### Criar pedido
 
@@ -93,6 +96,8 @@ query {
 
 ### REST
 
+Em outra sessão do terminal, em qualquer path.
+
 #### Criar pedido
 
 ```sh
@@ -108,6 +113,8 @@ curl http://localhost:8000/order
 ```
 
 ### gRPC (usando evans)
+
+Em outro terminal, à partir da pasta `cleanarch`(raiz deste projeto).
 
 #### Iniciar o evans
 
@@ -136,4 +143,3 @@ call ListOrders
 ## Licença
 
 Apache-2.0
-

@@ -66,8 +66,7 @@ func main() {
 	//REST API
 	webserver := webserver.NewWebServer(configs.WebServerPort)
 	webOrderHandler := NewWebOrderHandler(db, eventDispatcher)
-	webserver.AddHandler("/order", webOrderHandler.Create)
-	webserver.AddHandler("/order", webOrderHandler.List)
+	webserver.AddHandler("/order", webOrderHandler.HandleOrder)
 	fmt.Println("Starting web server on port", configs.WebServerPort)
 	go webserver.Start()
 
