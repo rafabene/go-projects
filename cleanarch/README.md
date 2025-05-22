@@ -50,9 +50,19 @@ Elas serão executadas automaticamente
 
 ### Rodando a aplicação
 
+1. Altere o diretório
 ```sh
 cd cmd/ordersystem
+```
+
+2. Construa a aplicação
+```sh
 go build
+```
+
+3. Execute o binário
+
+```sh
 ./ordersystem
 ```
 
