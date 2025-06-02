@@ -49,7 +49,7 @@ func main() {
 	m.Up()
 
 	// RabbitMQ
-	rabbitMQChannel := getRabbitMQChannel()
+	rabbitMQChannel := getRabbitMQChannel(configs.RabbitMQHost, configs.RabbitMQPort)
 
 	eventDispatcher := events.NewEventDispatcher()
 	eventDispatcher.Register("OrderCreated", &handler.OrderCreatedHandler{
@@ -95,8 +95,9 @@ func main() {
 	http.ListenAndServe(":"+configs.GraphQLServerPort, nil)
 }
 
-func getRabbitMQChannel() *amqp.Channel {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+func getRabbitMQChannel(host string, port string) *amqp.Channel {
+	url := fmt.Sprintf("amqp://guest:guest@%s:%s/", host, port)
+	conn, err := amqp.Dial(url)
 	if err != nil {
 		panic(err)
 	}

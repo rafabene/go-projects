@@ -35,40 +35,22 @@ configs/                # Configurações
 
 ### Pré-requisitos
 
-- Go 1.20+
+- Go 1.23+
 - Docker e Docker Compose
-
-### Subindo o banco de dados
-
-```sh
-docker-compose up -d
-```
-
-### Rodando as migrations
-
-Elas serão executadas automaticamente
 
 ### Rodando a aplicação
 
-1. Altere o diretório
-```sh
-cd cmd/ordersystem
-```
-
-2. Construa a aplicação
-```sh
-go build
-```
-
-3. Execute o binário
+Agora, utilize o Docker Compose para buildar e rodar toda a stack (aplicação e banco de dados):
 
 ```sh
-./ordersystem
+docker-compose up --build
 ```
+
+As migrations serão executadas automáticamente.
 
 A aplicação estará disponível em:
 
-- REST: http://localhost:8080
+- REST: http://localhost:8000
 - GraphQL Playground: http://localhost:8080/graphql
 - gRPC: consulte protofiles em `internal/infra/grpc/protofiles/`
 
@@ -113,7 +95,7 @@ Em outra sessão do terminal, em qualquer path.
 ```sh
 curl -X POST http://localhost:8000/order \
   -H "Content-Type: application/json" \
-  -d '{"id": "1", "Price": 100, "Tax": 10}'
+  -d '{"id": "2", "Price": 200, "Tax": 20}'
 ```
 
 #### Listar pedidos
@@ -122,14 +104,14 @@ curl -X POST http://localhost:8000/order \
 curl http://localhost:8000/order
 ```
 
-### gRPC (usando evans)
+### gRPC (usando evans previamente instalado)
 
 Em outro terminal, à partir da pasta `cleanarch`(raiz deste projeto).
 
 #### Iniciar o evans
 
 ```sh
-evans internal/infra/grpc/protofiles/order.proto
+~/go/bin/evans internal/infra/grpc/protofiles/order.proto
 ```
 
 #### Criar pedido
@@ -137,9 +119,9 @@ evans internal/infra/grpc/protofiles/order.proto
 ```sh
 call CreateOrder
 {
-  "id": "1",
-  "price": 100,
-  "tax": 10
+  "id": "3",
+  "price": 300,
+  "tax": 30
 }
 ```
 
@@ -148,6 +130,12 @@ call CreateOrder
 ```sh
 call ListOrders
 {}
+```
+
+#### Sair
+
+```sh
+exit
 ```
 
 ## Licença

@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   mysql:
     image: mysql
@@ -24,3 +22,19 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+
+  cleanarch:
+    working_dir: /app/cmd/ordersystem
+    entrypoint: ["sh", "-c", "/app/wait-for-it.sh mysql:3306 -- /app/wait-for-it.sh rabbitmq:5672 -t 30 -- ./ordersystem"]
+    depends_on:
+      - rabbitmq
+      - mysql
+    build:
+      context: .
+    ports:
+      - 8000:8000
+      - 8080:8080
+      - 50051:50051
+    environment:
+      DB_HOST: mysql
+      RABBITMQ_HOST: rabbitmq
