@@ -47,11 +47,12 @@ func getApiKey() (string, error) {
 	envPath := filepath.Join(basePath, "../..", "configs", ".env")
 	err := godotenv.Load(envPath)
 	if err != nil {
-		return "", fmt.Errorf("failed to load .env file: %w", err)
+		log.Printf("Error loading .env file. Will continue with env var: %v", err)
+
 	}
 	apiKey := os.Getenv("WEATHER_APIKEY")
 	if apiKey == "" {
-		return "", fmt.Errorf("WEATHER_APIKEY not found in .env file")
+		return "", fmt.Errorf("WEATHER_APIKEY not found in environment variables")
 	}
 	return apiKey, nil
 }
