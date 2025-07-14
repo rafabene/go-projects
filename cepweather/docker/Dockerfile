@@ -3,6 +3,7 @@ FROM golang:1.24-alpine AS builder
 WORKDIR /app
 COPY . /app/
 RUN go mod download
+RUN go test ./tests/
 RUN go build -o cepweather ./cmd/main.go
 
 FROM alpine
