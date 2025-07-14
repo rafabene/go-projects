@@ -38,3 +38,15 @@ curl -X POST http://localhost:8080/api/v1/weather \
 ```
 
 Você deve receber uma resposta com os dados do clima para o CEP informado.
+
+### 5. API no Google Cloud Run.
+
+Esta mesma API está sendo executada no Goole Cloud Run e pode ser testada pelo endpoint `https://weather-519804914149.southamerica-east1.run.app/api/v1/weather`.
+
+Exemplo:
+
+```bash
+curl -X POST https://weather-519804914149.southamerica-east1.run.app/api/v1/weather \
+  -H "Content-Type: application/json" \
+  -d '{"cep":"75110430"}'
+```
