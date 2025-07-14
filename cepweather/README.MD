@@ -55,11 +55,7 @@ Resposta 200 OK:
 {
   "temp_c": 25.0,
   "temp_f": 77.0,
-  "temp_k": 298.15,
-  "condition": "Partly cloudy",
-  "humidity": 60,
-  "city": "Anápolis",
-  "state": "GO"
+  "temp_k": 298.15
 }
 ```
 
