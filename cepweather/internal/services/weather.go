@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/joho/godotenv"
 	"github.com/rafabene/go-projects/cepweather/internal/models"
@@ -20,7 +21,8 @@ func GetWeatherData(localidade string) (models.WeatherData, error) {
 		return models.WeatherData{}, fmt.Errorf("failed to get API key: %w", err)
 	}
 	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s&aqi=no", apiKey, url.QueryEscape(localidade))
-	log.Printf("Fetching weather data from URL: %s", url)
+	urlEscaped := strings.Replace(url, apiKey, "******", 1) // Mask the API key in logs
+	log.Printf("Fetching weather data from URL: %s", urlEscaped)
 	resp, err := http.Get(url)
 	if err != nil {
 		return models.WeatherData{}, err

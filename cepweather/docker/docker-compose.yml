@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  cepweather:
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: cepweather_app
+    ports:
+      - "8080:8080"
+    env_file:
+      - ../configs/.env
+    restart: unless-stopped
