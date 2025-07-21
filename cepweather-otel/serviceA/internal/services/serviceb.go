@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/rafabene/go-projects/cepweather-otel/serviceA/configs"
-	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internals/models"
+	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internal/models"
 )
 
 func CallServiceB(cep string) (*models.WeatherData, error) {

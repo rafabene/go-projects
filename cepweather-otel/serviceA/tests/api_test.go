@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internals/handlers"
+	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internal/handlers"
 )
 
 func TestNullBody(t *testing.T) {

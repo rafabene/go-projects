@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internals/models"
-	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internals/services"
+	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internal/models"
+	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internal/services"
 )
 
 var (

@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internals/handlers"
+	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internal/handlers"
 )
 
 const port = ":8080"
