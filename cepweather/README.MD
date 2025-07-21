@@ -93,7 +93,7 @@ go test ./tests
 #### 4. Build e execute com Docker Compose
 
 ```bash
-docker-compose up --build
+docker-compose -f docker/docker-compose.yml up --build
 ```
 
 O serviço estará disponível em `http://localhost:8080`.
