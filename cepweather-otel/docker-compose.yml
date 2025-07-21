@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  serviceA:
+    build: 
+      context: serviceA
+      dockerfile: docker/Dockerfile
+    container_name: serviceA
+    ports:
+      - "8080:8080"
+    env_file:
+      - serviceA/configs/.env
+    restart: unless-stopped
+  serviceB:
+    build: 
+      context: serviceB
+      dockerfile: docker/Dockerfile
+    container_name: serviceB
+    ports:
+      - "8081:8081"
+    env_file:
+      - serviceB/configs/.env
+    restart: unless-stopped 
+  jaeger:
+    image: jaegertracing/jaeger:2.0.0
+    container_name: jaeger
+    ports:
+      - "5778:5778"
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+      - "14250:14250"
+      - "14268:14268"
+      - "9411:9411"
+    command:
+      - "--set"
+      - "receivers.otlp.protocols.http.endpoint=0.0.0.0:4318"
+      - "--set"
+      - "receivers.otlp.protocols.grpc.endpoint=0.0.0.0:4317"
