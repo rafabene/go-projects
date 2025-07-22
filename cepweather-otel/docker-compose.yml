@@ -1,16 +1,18 @@
 version: '3.8'
 services:
-  serviceA:
+  servicea:
     build: 
       context: serviceA
       dockerfile: docker/Dockerfile
     container_name: serviceA
     ports:
       - "8080:8080"
-    env_file:
-      - serviceA/configs/.env
+    environment:
+      - SERVICEB_ENDPOINT=http://serviceb:8081/api/v1/weather
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
     restart: unless-stopped
-  serviceB:
+  serviceb:
     build: 
       context: serviceB
       dockerfile: docker/Dockerfile
@@ -19,9 +21,12 @@ services:
       - "8081:8081"
     env_file:
       - serviceB/configs/.env
+    environment:
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
     restart: unless-stopped 
   jaeger:
-    image: jaegertracing/jaeger:2.0.0
+    image: jaegertracing/jaeger:2.8.0
     container_name: jaeger
     ports:
       - "5778:5778"
@@ -31,8 +36,3 @@ services:
       - "14250:14250"
       - "14268:14268"
       - "9411:9411"
-    command:
-      - "--set"
-      - "receivers.otlp.protocols.http.endpoint=0.0.0.0:4318"
-      - "--set"
-      - "receivers.otlp.protocols.grpc.endpoint=0.0.0.0:4317"

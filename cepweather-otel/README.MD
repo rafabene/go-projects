@@ -19,23 +19,34 @@ API REST em Go para consulta de clima atual por CEP brasileiro, integrando com a
 ### Estrutura do Projeto
 
 ```
-serviceB/
-├── cmd/                # Ponto de entrada da aplicação (main.go)
-├── internal/
-│   ├── handlers/       # Handlers HTTP
-│   ├── models/         # Structs e tipos
-│   └── services/       # Integração com APIs externas
-├── configs/            # Arquivos de configuração (.env)
-├── tests/              # Testes automatizados
-├── docker/             # Arquivos para execução em containers
-└── README.md           # Documentação
+cepweather-otel/
+├── serviceA/
+│   ├── cmd/                # Ponto de entrada da aplicação (main.go)
+│   ├── internal/
+│   │   ├── handlers/       # Handlers HTTP
+│   │   ├── models/         # Structs e tipos
+│   │   └── services/       # Integração com ServiceB
+│   ├── configs/            # Arquivos de configuração (.env)
+│   ├── tests/              # Testes automatizados
+│   └── docker/             # Dockerfile
+├── serviceB/
+│   ├── cmd/                # Ponto de entrada da aplicação (main.go)
+│   ├── internal/
+│   │   ├── handlers/       # Handlers HTTP
+│   │   ├── models/         # Structs e tipos
+│   │   └── services/       # Integração com APIs externas
+│   ├── configs/            # Arquivos de configuração (.env)
+│   ├── tests/              # Testes automatizados
+│   └── docker/             # Dockerfile
+├── docker-compose.yml      # Orquestração dos serviços e Jaeger
+└── README.md               # Documentação
 ```
 
 ---
 
 ### Parâmetros de Entrada
 
-**POST /api/v1/weather**
+**POST /api/v1/cep**
 
 Body (JSON):
 
@@ -76,12 +87,15 @@ git clone https://github.com/rafabene/go-projects.git
 cd go-projects/cepweather-otel/serviceB
 ```
 
-#### 2. Configure a chave da WeatherAPI
+#### 2. Edite o arquivo .env
+
+Copie o arquivo de template e edite conforme necessário:
 
 ```bash
 cp configs/.env.template configs/.env
 # Edite configs/.env e coloque sua chave da WeatherAPI
-# que pode ser obtida em https://www.weatherapi.com/
+# Exemplo de variáveis:
+# WEATHERAPI_KEY=xxxxxx
 ```
 
 #### 3. Execute os testes
@@ -90,16 +104,26 @@ cp configs/.env.template configs/.env
 go test ./tests
 ```
 
-#### 4. Build e execute
+#### 4. Build e execução com Docker
+
+Para rodar localmente com Docker Compose (inclui Jaeger para observabilidade):
 
 ```bash
-go build -o serviceb cmd/main.go
-./serviceb
+cd ..
+docker-compose up --build
 ```
 
-O serviço estará disponível em `http://localhost:8081`.
+Isso irá:
 
-#### 5. Teste a API com curl
+- Construir as imagens do serviceA, serviceB e Jaeger
+- Subir todos os serviços integrados
+
+O serviço B estará disponível em `http://localhost:8081`.
+O serviço A estará disponível em `http://localhost:8080`.
+
+#### 5. Teste da API
+
+Para testar o serviceB:
 
 ```bash
 curl -X POST http://localhost:8081/api/v1/weather \
@@ -107,7 +131,25 @@ curl -X POST http://localhost:8081/api/v1/weather \
   -d '{"cep":"75110430"}'
 ```
 
+Para testar o serviceA (que chama o serviceB):
+
+```bash
+curl -X POST http://localhost:8080/api/v1/cep \
+  -H "Content-Type: application/json" \
+  -d '{"cep":"75110430"}'
+```
+
 Você deve receber uma resposta com os dados do clima para o CEP informado.
+
+#### 6. Observabilidade com Jaeger
+
+O Jaeger estará disponível em:
+
+```
+http://localhost:16686
+```
+
+Abra no navegador para visualizar traces das requisições entre os serviços.
 
 ---
 

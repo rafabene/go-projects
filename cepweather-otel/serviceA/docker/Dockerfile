@@ -8,5 +8,6 @@ RUN go build -o servicea ./cmd/main.go
 FROM alpine
 WORKDIR /app
 COPY --from=builder /app/servicea .
+COPY ./configs/.env ./configs/.env
 EXPOSE 8080
 CMD ["/app/servicea"]
