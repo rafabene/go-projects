@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -8,12 +9,32 @@ import (
 	"net/url"
 
 	"github.com/rafabene/go-projects/cepweather-otel/serviceB/internal/models"
+	"github.com/rafabene/go-projects/cepweather-otel/serviceB/internal/tracing"
+	"go.opentelemetry.io/otel/trace"
 )
 
-func GetCepData(cep string) (models.CepOutput, error) {
+var (
+	tracerCep trace.Tracer
+)
+
+func init() {
+	var err error
+	tracerCep, err = tracing.NewTracer()
+	if err != nil {
+		log.Fatalf("failed to create tracer: %v", err)
+	}
+}
+
+func GetCepData(ctx context.Context, cep string) (models.CepOutput, error) {
+	ctx, span := tracerCep.Start(ctx, "GetCEP")
+	defer span.End()
 	url := fmt.Sprintf("https://viacep.com.br/ws/%s/json/", url.QueryEscape(cep))
 	log.Printf("Fetching CEP data from URL: %s", url)
-	resp, err := http.Get(url)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return models.CepOutput{}, err
+	}
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return models.CepOutput{}, err
 	}

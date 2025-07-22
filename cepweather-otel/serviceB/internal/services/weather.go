@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -13,9 +14,27 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/rafabene/go-projects/cepweather-otel/serviceB/internal/models"
+	"github.com/rafabene/go-projects/cepweather-otel/serviceB/internal/tracing"
+
+	"go.opentelemetry.io/otel/trace"
 )
 
-func GetWeatherData(localidade string) (models.WeatherData, error) {
+var (
+	tracerWeather trace.Tracer
+)
+
+func init() {
+	var err error
+	tracerWeather, err = tracing.NewTracer()
+	if err != nil {
+		log.Fatalf("failed to create tracer: %v", err)
+	}
+}
+
+func GetWeatherData(ctx context.Context, localidade string) (models.WeatherData, error) {
+	ctx, span := tracerWeather.Start(ctx, "GetWeather")
+	defer span.End()
+
 	apiKey, err := getApiKey()
 	if err != nil {
 		return models.WeatherData{}, fmt.Errorf("failed to get API key: %w", err)
@@ -23,7 +42,11 @@ func GetWeatherData(localidade string) (models.WeatherData, error) {
 	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s&aqi=no", apiKey, url.QueryEscape(localidade))
 	urlEscaped := strings.Replace(url, apiKey, "******", 1) // Mask the API key in logs
 	log.Printf("Fetching weather data from URL: %s", urlEscaped)
-	resp, err := http.Get(url)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return models.WeatherData{}, err
+	}
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return models.WeatherData{}, err
 	}

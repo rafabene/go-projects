@@ -9,11 +9,22 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internal/models"
 	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internal/services"
+	"github.com/rafabene/go-projects/cepweather-otel/serviceA/internal/tracing"
+	"go.opentelemetry.io/otel/trace"
 )
 
 var (
 	validate = validator.New(validator.WithRequiredStructEnabled())
+	tracer   trace.Tracer
 )
+
+func init() {
+	var err error
+	tracer, err = tracing.NewTracer()
+	if err != nil {
+		log.Fatalf("failed to create tracer: %v", err)
+	}
+}
 
 func HandleCepWeather(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -25,6 +36,8 @@ func HandleCepWeather(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlePostCep(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "HandleCepWeather")
+	defer span.End()
 	input := &models.CepInput{}
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -40,7 +53,7 @@ func handlePostCep(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Validation error: %v", err)
 		return
 	}
-	weatherData, err := services.CallServiceB(input.Cep)
+	weatherData, err := services.CallServiceB(ctx, input.Cep)
 	if err != nil {
 		http.Error(w, "failed to call service B", http.StatusInternalServerError)
 		log.Printf("Error calling service B: %v", err)

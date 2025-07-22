@@ -1,9 +1,7 @@
 package configs
 
 import (
-	"fmt"
 	"log"
-	"os"
 	"path/filepath"
 	"runtime"
 
@@ -21,13 +19,4 @@ func LoadConfig() {
 	if err != nil {
 		log.Printf("Error loading .env file. Will continue with env var: %v", err)
 	}
-}
-
-func GetServiceEndPoint() (string, error) {
-	LoadConfig()
-	endpoint := os.Getenv("SERVICEB_ENDPOINT")
-	if endpoint == "" {
-		return "", fmt.Errorf("SERVICEB_ENDPOINT não encontrado nas variáveis de ambiente")
-	}
-	return endpoint, nil
 }
