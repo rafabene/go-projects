@@ -1,0 +1,65 @@
+# Binários compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+servidor
+main
+
+# Arquivos de teste
+*.test
+*.out
+
+# Dependências
+vendor/
+
+# Go workspace file
+go.work
+
+# Arquivos de ambiente locais (sensíveis)
+.env.local
+.env.production
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Arquivos de sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Coverage reports
+*.cover
+coverage.txt
+coverage.html
+
+# Profiling data
+*.prof
+*.pprof
+
+# Docker
+.dockerignore
+
+# Arquivos de desenvolvimento local
+debug
+*.debug

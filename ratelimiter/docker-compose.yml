@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  ratelimiter:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # Configurações do Rate Limiter
+      - LIMITE_IP_POR_SEGUNDO=5
+      - TEMPO_BLOQUEIO_IP=300
+      - LIMITE_TOKEN_POR_SEGUNDO=50
+      - TEMPO_BLOQUEIO_TOKEN=300
+      - PORTA_SERVIDOR=8080
+      
+      # Tokens personalizados
+      - TOKEN_LIMITE_abc123=100
+      - TOKEN_LIMITE_vip_user=200
+      - TOKEN_LIMITE_basic_user=20
+    
+    volumes:
+      - ./.env:/root/.env:ro
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Rede para isolamento
+networks:
+  default:
+    name: ratelimiter-network
