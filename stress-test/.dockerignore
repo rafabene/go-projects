@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# Documentação
+README.md
+*.md
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Binários
+stress-test
+*.exe
+
+# Arquivos de desenvolvimento
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.temp
+
+# Testes e coverage
+*.test
+*.out
+
+# Dependências de desenvolvimento
+vendor/
+
+# Variáveis de ambiente
+.env
+.env.local
